@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { AppState } from 'src/app/app.reducers';
 import { AuthService } from '../auth.service';
 import { CamposRequerido } from '../register/register.component';
 
@@ -9,7 +12,10 @@ import { CamposRequerido } from '../register/register.component';
   styles: [
   ]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+
+  cargando: boolean;
+  subscrition: Subscription
 
   miFormulario: FormGroup = this.fb.group(
     {
@@ -19,11 +25,20 @@ export class LoginComponent implements OnInit {
   );
 
   constructor(
+    private authService: AuthService,
     private fb: FormBuilder,
-    private authService: AuthService
+    public store: Store<AppState>
   ) { }
 
   ngOnInit(): void {
+    this.subscrition = this.store.select('ui')
+                           .subscribe( ui => {
+                             this.cargando = ui.isLoading;
+                            });
+  }
+
+  ngOnDestroy(): void {
+    this.subscrition.unsubscribe();
   }
 
   login(): void {
