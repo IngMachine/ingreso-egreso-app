@@ -15,7 +15,7 @@ import { ActivarLoadingAction, DesactivarLoadingAction } from '../shared/ui.acti
 // rxjs
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SetUserAction } from './auth.actions';
+import { SetUserAction, UnsetUserAction } from './auth.actions';
 
 
 @Injectable({
@@ -24,6 +24,7 @@ import { SetUserAction } from './auth.actions';
 export class AuthService {
 
   private userSubscription: Subscription;
+  private usuario: User;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -41,9 +42,10 @@ export class AuthService {
                                          .subscribe( (usuarioObj: DataObj) => {
                                            const newUser = new User( usuarioObj );
                                            this.store.dispatch( new SetUserAction( newUser ));
-                                           console.log(newUser);
+                                           this.usuario = newUser;
                                           });
       } else {
+        this.usuario = null;
         this.userSubscription?.unsubscribe();
       }
     });
@@ -96,6 +98,8 @@ export class AuthService {
     this.router.navigate(['/login']);
     this.afAuth.signOut();
 
+    this.store.dispatch( new UnsetUserAction() );
+
   }
 
   isAuth(): Observable<boolean> {
@@ -108,5 +112,9 @@ export class AuthService {
                    return fbUser != null;
                   })
                );
+  }
+
+  getUsuario(): User {
+    return {...this.usuario}
   }
 }

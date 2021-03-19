@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../app.reducers';
+import { IngresoEgreso } from '../model/ingreso-egreso.model';
+import { Subscription } from 'rxjs';
+import { IngresoEgresoService } from '../service/ingreso-egreso.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detalle',
@@ -6,11 +12,33 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class DetalleComponent implements OnInit {
+export class DetalleComponent implements OnInit,OnDestroy {
 
-  constructor() { }
+  items: IngresoEgreso[];
+  susbscrition: Subscription;
+
+  constructor(
+    private store: Store<AppState>,
+    public ingresoEgresoService: IngresoEgresoService
+  ) { }
 
   ngOnInit(): void {
+    this.susbscrition = this.store.select('ingresoEgreso')
+                            .subscribe( ingresoEgreso => {
+                              console.log(ingresoEgreso.items);
+                              this.items = ingresoEgreso.items;
+                            });
+  }
+
+  ngOnDestroy(): void {
+    this.susbscrition.unsubscribe();
+  }
+
+  borrarItem( item: IngresoEgreso ): void{
+    this.ingresoEgresoService.borrarIngresoEgreso( item.uid )
+        .then( () => {
+          Swal.fire('Elemento eliminado', item.descripcion , 'warning');
+        });
   }
 
 }

@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscrition.unsubscribe();
+    this.subscrition?.unsubscribe();
   }
 
   guardar(): void {
