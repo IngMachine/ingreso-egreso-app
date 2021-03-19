@@ -1,24 +1,24 @@
-import { Routes } from '@angular/router';
-import { EstadisticaComponent } from '../ingreso-egreso/estadistica/estadistica.component';
-import { IngresoEgresoComponent } from '../ingreso-egreso/ingreso-egreso.component';
-import { DetalleComponent } from '../ingreso-egreso/detalle/detalle.component';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { DashboardComponent } from './dashboard.component';
+import { dashboardRoutes } from './dashboard.routes';
 
-
-export const dashboardRoutes: Routes = [
+const routes: Routes = [
   {
     path: '',
-    component: EstadisticaComponent
+    component: DashboardComponent,
+    children: dashboardRoutes,
+    // canActivate: [ AuthGuard ]
   },
-  {
-    path: 'ingreso-egreso',
-    component: IngresoEgresoComponent
-  },
-  {
-    path: 'detalles',
-    component: DetalleComponent
-  },
-  {
-    path: '**',
-    redirectTo: ''
-  }
 ];
+
+@NgModule({
+  declarations: [],
+  imports: [
+    RouterModule.forChild(routes)
+  ],
+  exports: [
+    RouterModule
+  ]
+})
+export class DashboardRoutingModule { }

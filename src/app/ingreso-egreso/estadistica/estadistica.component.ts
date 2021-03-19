@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MultiDataSet, Label, SingleDataSet} from 'ng2-charts';
+import { Label, SingleDataSet} from 'ng2-charts';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../app.reducers';
 import { Subscription } from 'rxjs';
 import { IngresoEgreso } from '../model/ingreso-egreso.model';
+import { AppStateR } from '../ingreso-egreso.reducer';
 
 @Component({
   selector: 'app-estadistica',
@@ -26,7 +26,7 @@ export class EstadisticaComponent implements OnInit {
   susbcrition: Subscription;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppStateR>
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class EstadisticaComponent implements OnInit {
                                  });
   }
 
-  contarIngresoEgreso( items: IngresoEgreso[]) {
+  contarIngresoEgreso( items: IngresoEgreso[]) : void{
     this.ingresos = 0;
     this.egresos = 0;
 

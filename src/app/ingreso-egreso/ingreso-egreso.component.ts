@@ -4,9 +4,9 @@ import { IngresoEgreso } from './model/ingreso-egreso.model';
 import { IngresoEgresoService } from './service/ingreso-egreso.service';
 import Swal from 'sweetalert2';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.reducers';
 import { Subscription } from 'rxjs';
 import { ActivarLoadingAction, DesactivarLoadingAction } from '../shared/ui.actions';
+import { AppStateR } from './ingreso-egreso.reducer';
 
 @Component({
   selector: 'app-ingreso-egreso',
@@ -30,7 +30,7 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     public ingresoEgresoService: IngresoEgresoService,
-    private store: Store<AppState>
+    private store: Store<AppStateR>
   ) { }
 
   ngOnInit(): void {
