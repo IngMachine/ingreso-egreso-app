@@ -115,6 +115,6 @@ export class AuthService {
   }
 
   getUsuario(): User {
-    return {...this.usuario}
+    return {...this.usuario};
   }
 }
